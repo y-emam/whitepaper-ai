@@ -39,7 +39,7 @@ export async function retrieve(query: string, opts: RetrieveOptions = {}): Promi
   const ftsWeight = opts.ftsWeight ?? env.RETRIEVAL_FTS_WEIGHT;
 
   const supabase = getPublicClient();
-  const queryEmbedding = await embed(query);
+  const queryEmbedding = await embed(query, "query");
 
   const { data, error } = await supabase.rpc("hybrid_search", {
     query_embedding: queryEmbedding,

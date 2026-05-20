@@ -6,7 +6,7 @@ const EnvSchema = z.object({
   SUPABASE_SERVICE_ROLE_KEY: z.string().min(1).optional(),
   GEMINI_API_KEY: z.string().min(1),
   GEMINI_LLM_MODEL: z.string().default("gemini-2.5-flash"),
-  GEMINI_EMBED_MODEL: z.string().default("text-embedding-004"),
+  GEMINI_EMBED_MODEL: z.string().default("gemini-embedding-001"),
   RETRIEVAL_TOP_K: z.coerce.number().int().positive().default(8),
   RETRIEVAL_VECTOR_WEIGHT: z.coerce.number().min(0).max(1).default(0.6),
   RETRIEVAL_FTS_WEIGHT: z.coerce.number().min(0).max(1).default(0.4),
