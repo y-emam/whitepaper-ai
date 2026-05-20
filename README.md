@@ -1,6 +1,8 @@
 # whitepaper-ai
 
-> Citation-grounded RAG search across 25+ AWS whitepapers, with a polished Next.js web UI and a Claude-Desktop-compatible MCP server. Same hybrid retrieval (pgvector + Postgres FTS) powers both.
+> Citation-grounded RAG search across 21+ AWS whitepapers, with a polished Next.js web UI and a Claude-Desktop-compatible MCP server. Same hybrid retrieval (pgvector + Postgres FTS) powers both.
+
+**Live demo:** [whitepaper-ai.vercel.app](https://whitepaper-ai.vercel.app)
 
 [![Next.js](https://img.shields.io/badge/Next.js-14-black)]() [![TypeScript](https://img.shields.io/badge/TypeScript-strict-blue)]() [![Supabase](https://img.shields.io/badge/Supabase-pgvector-green)]() [![MCP](https://img.shields.io/badge/MCP-server-purple)]()
 

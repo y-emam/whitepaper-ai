@@ -1,106 +1,108 @@
-import { GoogleGenerativeAI, TaskType } from "@google/generative-ai";
 import { loadEnv } from "./env.js";
 
-let client: GoogleGenerativeAI | null = null;
+const VOYAGE_ENDPOINT = "https://api.voyageai.com/v1/embeddings";
+const MAX_INPUTS_PER_REQUEST = 128;
+const MAX_INPUT_CHARS = 32_000;
 
-function getClient(): GoogleGenerativeAI {
-  if (client) return client;
-  const env = loadEnv();
-  client = new GoogleGenerativeAI(env.GEMINI_API_KEY);
-  return client;
+interface VoyageEmbedResponse {
+  data: Array<{ embedding: number[]; index: number }>;
+  model: string;
+  usage: { total_tokens: number };
 }
 
-const TARGET_DIMENSIONS = 768;
-
-const GEMINI_FREE_TIER_RPM = 90;
-const MIN_INTERVAL_MS = Math.ceil(60_000 / GEMINI_FREE_TIER_RPM);
-let nextAvailableAt = 0;
-
-async function throttle(): Promise<void> {
-  const now = Date.now();
-  const wait = nextAvailableAt - now;
-  if (wait > 0) await new Promise((r) => setTimeout(r, wait));
-  nextAvailableAt = Math.max(now, nextAvailableAt) + MIN_INTERVAL_MS;
-}
-
-function parseRetryDelayMs(message: string): number | null {
-  const m = message.match(/retry in ([\d.]+)s/i);
-  if (m && m[1]) return Math.ceil(parseFloat(m[1]) * 1000);
-  const m2 = message.match(/"retryDelay"\s*:\s*"(\d+)s"/);
-  if (m2 && m2[1]) return parseInt(m2[1], 10) * 1000;
-  return null;
+interface VoyageError {
+  detail?: string;
+  error?: { message?: string };
 }
 
 export type EmbedTaskType = "document" | "query";
 
-async function embedOnce(text: string, taskKind: EmbedTaskType): Promise<number[]> {
+function inputType(kind: EmbedTaskType): "document" | "query" {
+  return kind;
+}
+
+function trim(text: string): string {
+  return text.length > MAX_INPUT_CHARS ? text.slice(0, MAX_INPUT_CHARS) : text;
+}
+
+async function callVoyage(
+  inputs: string[],
+  taskKind: EmbedTaskType
+): Promise<number[][]> {
   const env = loadEnv();
-  const model = getClient().getGenerativeModel({ model: env.GEMINI_EMBED_MODEL });
-  // outputDimensionality is supported by the API but not yet in @google/generative-ai types.
-  const request = {
-    content: { role: "user", parts: [{ text }] },
-    taskType: taskKind === "query" ? TaskType.RETRIEVAL_QUERY : TaskType.RETRIEVAL_DOCUMENT,
-    outputDimensionality: TARGET_DIMENSIONS
-  } as unknown as Parameters<typeof model.embedContent>[0];
-  const result = await model.embedContent(request);
-  const values = result.embedding?.values;
-  if (!values || values.length === 0) {
-    throw new Error("Gemini embedding returned empty vector.");
-  }
-  return values;
-}
+  const body = {
+    model: env.VOYAGE_EMBED_MODEL,
+    input: inputs.map(trim),
+    input_type: inputType(taskKind),
+    output_dimension: env.VOYAGE_EMBED_DIMENSIONS
+  };
 
-/**
- * Embed a single text into a 768-dim vector via Gemini gemini-embedding-001.
- * Self-throttles to stay under the free-tier 100 RPM limit, and retries up
- * to 3 times on 429 quota errors using the suggested retryDelay.
- */
-export async function embed(text: string, taskKind: EmbedTaskType = "document"): Promise<number[]> {
-  const trimmed = text.length > 8192 ? text.slice(0, 8192) : text;
-  let lastError: unknown = null;
-  for (let attempt = 0; attempt < 4; attempt += 1) {
-    await throttle();
+  const res = await fetch(VOYAGE_ENDPOINT, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${env.VOYAGE_API_KEY}`
+    },
+    body: JSON.stringify(body)
+  });
+
+  if (!res.ok) {
+    let message = `Voyage API ${res.status}`;
     try {
-      return await embedOnce(trimmed, taskKind);
-    } catch (err) {
-      lastError = err;
-      const message = err instanceof Error ? err.message : String(err);
-      if (!message.includes("429") && !/quota/i.test(message)) throw err;
-      const suggested = parseRetryDelayMs(message);
-      const backoff = suggested ?? Math.min(60_000, 2_000 * 2 ** attempt);
-      process.stderr.write(`  [rate] embed 429 — sleeping ${(backoff / 1000).toFixed(1)}s before retry ${attempt + 1}\n`);
-      await new Promise((r) => setTimeout(r, backoff + 250));
-      nextAvailableAt = Date.now();
+      const err = (await res.json()) as VoyageError;
+      message += `: ${err.detail ?? err.error?.message ?? "unknown"}`;
+    } catch {
+      message += `: ${await res.text()}`;
     }
+    throw new Error(message);
   }
-  throw lastError instanceof Error
-    ? lastError
-    : new Error("Gemini embed failed after retries");
+
+  const json = (await res.json()) as VoyageEmbedResponse;
+  const sorted = [...json.data].sort((a, b) => a.index - b.index);
+  return sorted.map((d) => d.embedding);
 }
 
 /**
- * Embed many texts. Concurrency is bounded but the per-call throttle is the
- * real rate gate, so it's safe to keep the worker count modest.
+ * Embed a single text via Voyage voyage-3-large at the configured dimension.
+ * Use taskKind="query" at retrieval time, "document" during ingestion — the
+ * model projects each into asymmetric subspaces optimized for retrieval.
+ */
+export async function embed(
+  text: string,
+  taskKind: EmbedTaskType = "document"
+): Promise<number[]> {
+  const vectors = await callVoyage([text], taskKind);
+  const v = vectors[0];
+  if (!v || v.length === 0) {
+    throw new Error("Voyage returned an empty embedding vector.");
+  }
+  return v;
+}
+
+/**
+ * Embed many texts in one HTTP round trip when possible. Voyage accepts up to
+ * 128 inputs per request, so a typical paper (50–200 chunks) fits in 1–2 calls.
+ * `concurrency` is kept as a parameter for API compatibility but the per-call
+ * batch is the real efficiency lever.
  */
 export async function embedBatch(
   texts: string[],
-  concurrency = 4,
+  _concurrency = 4,
   taskKind: EmbedTaskType = "document"
 ): Promise<number[][]> {
   const results: number[][] = new Array(texts.length);
-  let cursor = 0;
-  async function worker() {
-    while (cursor < texts.length) {
-      const i = cursor++;
-      const input = texts[i];
-      if (!input) {
-        results[i] = [];
-        continue;
+  for (let i = 0; i < texts.length; i += MAX_INPUTS_PER_REQUEST) {
+    const slice = texts.slice(i, i + MAX_INPUTS_PER_REQUEST);
+    const safeSlice = slice.map((t) => t ?? "");
+    const vectors = await callVoyage(safeSlice, taskKind);
+    for (let j = 0; j < vectors.length; j += 1) {
+      const vec = vectors[j];
+      if (vec) {
+        results[i + j] = vec;
+      } else {
+        results[i + j] = [];
       }
-      results[i] = await embed(input, taskKind);
     }
   }
-  const workers = Array.from({ length: Math.min(concurrency, texts.length) }, worker);
-  await Promise.all(workers);
   return results;
 }
