@@ -8,6 +8,7 @@
     "build": "pnpm -r build",
     "lint": "pnpm -r lint",
     "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
     "ingest": "pnpm --filter @whitepaper-ai/ingestion start",
     "ingest:scrape": "pnpm --filter @whitepaper-ai/ingestion scrape",
     "mcp": "pnpm --filter @whitepaper-ai/mcp-server start",

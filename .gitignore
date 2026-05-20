@@ -28,6 +28,15 @@ data/cache
 supabase/.temp
 supabase/.branches
 
+# Playwright / visual audit artifacts
+.playwright-mcp/
+*.png
+*.jpg
+*.jpeg
+!apps/web/public/**/*.png
+!apps/web/public/**/*.jpg
+!docs/screenshots/*.png
+
 # Misc
 .DS_Store
 *.log

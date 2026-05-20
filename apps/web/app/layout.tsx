@@ -9,12 +9,18 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "whitepaper-ai — Ask AWS whitepapers anything",
   description:
-    "Citation-grounded RAG search across 25+ AWS whitepapers. Hybrid vector + full-text retrieval, refusal when context is insufficient, MCP server for Claude Desktop.",
+    "Citation-grounded RAG search across 21+ AWS whitepapers. Hybrid vector + full-text retrieval, refusal when context is insufficient, MCP server for Claude Desktop.",
   metadataBase: new URL("https://whitepaper-ai.vercel.app"),
   openGraph: {
+    title: "whitepaper-ai — Ask AWS whitepapers anything",
+    description: "Cited answers from AWS whitepapers. No hallucination. Hybrid retrieval. MCP-ready.",
+    type: "website",
+    url: "https://whitepaper-ai.vercel.app"
+  },
+  twitter: {
+    card: "summary_large_image",
     title: "whitepaper-ai",
-    description: "Cited answers from AWS whitepapers. No hallucination. Hybrid retrieval.",
-    type: "website"
+    description: "Cited answers from AWS whitepapers. No hallucination. Hybrid retrieval. MCP-ready."
   }
 };
 
