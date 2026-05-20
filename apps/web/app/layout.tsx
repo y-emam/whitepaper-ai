@@ -9,7 +9,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "whitepaper-ai — Ask AWS whitepapers anything",
   description:
-    "Citation-grounded RAG search across 21+ AWS whitepapers. Hybrid vector + full-text retrieval, refusal when context is insufficient, MCP server for Claude Desktop.",
+    "Citation-grounded RAG search across 21 AWS whitepapers. Hybrid vector + full-text retrieval, refusal when context is insufficient, MCP server for Claude Desktop.",
   metadataBase: new URL("https://whitepaper-ai.vercel.app"),
   openGraph: {
     title: "whitepaper-ai — Ask AWS whitepapers anything",

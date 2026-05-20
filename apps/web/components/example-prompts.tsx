@@ -3,11 +3,11 @@
 import { Sparkles } from "lucide-react";
 
 export const EXAMPLE_QUESTIONS = [
-  "How does AWS Lambda mitigate cold starts in production?",
-  "What are the five pillars of the Well-Architected Framework?",
-  "When should I choose S3 over EFS for shared storage?",
-  "How do I design a multi-Region active-active architecture?",
-  "What encryption options exist for data at rest in RDS?"
+  "How does AWS Shield protect against DDoS attacks?",
+  "What are the pillars of the AWS Well-Architected Framework?",
+  "How should I architect resilient microservices on AWS?",
+  "What are AWS best practices for disaster recovery?",
+  "How does AWS handle logical separation between tenants?"
 ];
 
 interface ExamplePromptsProps {

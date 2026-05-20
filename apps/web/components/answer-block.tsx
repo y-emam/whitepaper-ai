@@ -53,13 +53,13 @@ export function AnswerBlock({ response, question }: AnswerBlockProps) {
         <h2 className="mt-1 text-base text-foreground">{question}</h2>
       </header>
 
-      {!response.sufficient_context ? (
+      {response.citations.length === 0 ? (
         <div className="flex items-start gap-3 rounded-xl border border-yellow-500/20 bg-yellow-500/5 p-4">
           <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0 text-yellow-400" />
           <div>
             <p className="text-sm font-medium text-yellow-100">Insufficient context</p>
             <p className="mt-0.5 text-xs text-yellow-100/70">
-              The retrieved passages don&apos;t fully cover this question. Read the answer with caution.
+              The retrieved passages don&apos;t cover this question. Try rephrasing or narrowing the topic.
             </p>
           </div>
         </div>

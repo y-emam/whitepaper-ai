@@ -39,9 +39,17 @@ Write a clear, technical answer in 2–4 paragraphs.
 - Every factual claim must include an inline citation in [c#] format, drawn ONLY from this list: ${validLabels}
 - When citing multiple sources for one claim, use SEPARATE brackets: [c1] [c2] [c3]. Do NOT bundle them like [c1, c2, c3].
 - Cite at most three passages per sentence — pick the most relevant.
-- If the passages don't fully answer the question, say so honestly and set sufficient_context to false.
 - Do NOT cite a passage ID that isn't in the list above.
 - Do NOT add citations to general background knowledge that does not come from the passages.
+
+[SUFFICIENT_CONTEXT RULE]
+Set "sufficient_context": true when the passages let you give a substantive,
+cited answer to the question. The standard is "did the passages support the
+answer you wrote", NOT "did the passages cover every conceivable angle".
+Only set "sufficient_context": false when you genuinely cannot answer from
+the passages and your "answer" field is an honest refusal that says so.
+If you produced a real answer with two or more inline citations, that is
+"sufficient_context": true.
 
 [OUTPUT FORMAT]
 Return JSON matching this schema:
