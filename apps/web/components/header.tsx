@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { BookOpen, Github, Menu, X } from "lucide-react";
 
 const NAV = [
@@ -59,31 +60,40 @@ export function Header() {
         </button>
       </div>
 
-      {open ? (
-        <div className="border-t border-border/60 bg-background/95 backdrop-blur-xl sm:hidden">
-          <nav className="mx-auto flex max-w-4xl flex-col gap-1 px-4 py-3 text-sm">
-            {NAV.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
+      <AnimatePresence initial={false}>
+        {open ? (
+          <motion.div
+            key="mobile-menu"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
+            className="overflow-hidden border-t border-border/60 bg-background/95 backdrop-blur-xl sm:hidden"
+          >
+            <nav className="mx-auto flex max-w-4xl flex-col gap-1 px-4 py-3 text-sm">
+              {NAV.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setOpen(false)}
+                  className="rounded-md px-3 py-2 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                >
+                  {item.label}
+                </Link>
+              ))}
+              <a
+                href="https://github.com/y-emam/whitepaper-ai"
+                target="_blank"
+                rel="noreferrer"
                 onClick={() => setOpen(false)}
-                className="rounded-md px-3 py-2 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                className="inline-flex items-center gap-2 rounded-md px-3 py-2 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
               >
-                {item.label}
-              </Link>
-            ))}
-            <a
-              href="https://github.com/y-emam/whitepaper-ai"
-              target="_blank"
-              rel="noreferrer"
-              onClick={() => setOpen(false)}
-              className="inline-flex items-center gap-2 rounded-md px-3 py-2 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-            >
-              <Github className="h-4 w-4" /> View source on GitHub
-            </a>
-          </nav>
-        </div>
-      ) : null}
+                <Github className="h-4 w-4" /> View source on GitHub
+              </a>
+            </nav>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </header>
   );
 }
