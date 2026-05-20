@@ -1,34 +1,82 @@
 # whitepaper-ai
 
-> Citation-grounded RAG search across 21+ AWS whitepapers, with a polished Next.js web UI and a Claude-Desktop-compatible MCP server. Same hybrid retrieval (pgvector + Postgres FTS) powers both.
+> Citation-grounded RAG search across 21 AWS whitepapers, with a polished Next.js web UI and a Claude-Desktop-compatible MCP server. Same hybrid retrieval (pgvector + Postgres FTS) powers both.
 
 **Live demo:** [whitepaper-ai.vercel.app](https://whitepaper-ai.vercel.app)
 
-[![Next.js](https://img.shields.io/badge/Next.js-14-black)]() [![TypeScript](https://img.shields.io/badge/TypeScript-strict-blue)]() [![Supabase](https://img.shields.io/badge/Supabase-pgvector-green)]() [![MCP](https://img.shields.io/badge/MCP-server-purple)]()
+[![Next.js](https://img.shields.io/badge/Next.js-14-black)]() [![TypeScript](https://img.shields.io/badge/TypeScript-strict-blue)]() [![Supabase](https://img.shields.io/badge/Supabase-pgvector-green)]() [![Voyage AI](https://img.shields.io/badge/embeddings-voyage--3--large-purple)]() [![MCP](https://img.shields.io/badge/MCP-server-purple)]() [![tests](https://img.shields.io/badge/tests-16%2F16-brightgreen)]()
 
+---
+
+![Answer with inline citations and a source drawer](docs/screenshots/03-answer.png)
+
+Every claim in the answer is an inline `[c#]` badge. Click one and the exact source passage opens in a drawer — paper title, page, section heading, and the literal excerpt that grounded the claim:
+
+![Citation drawer with the cited passage](docs/screenshots/04-citation-drawer.png)
+
+---
+
+## Why this exists
+
+AWS publishes 150+ whitepapers covering compute, storage, networking, security, and architecture. The information is authoritative but the format is hostile to fast research — PDFs aren't cross-searchable, concepts span multiple papers, and engineers either skim 80 pages or trust ungrounded chat answers.
+
+`whitepaper-ai` makes the corpus queryable in natural language with:
+
+- **Hybrid retrieval** — pgvector cosine similarity + Postgres full-text search, ranked together in a single SQL RPC.
+- **Citation-grounded generation** — Gemini 2.5 Flash answers under a strict JSON schema; every cited label is verified server-side against the retrieved set before responding. Hallucinated citations get rejected and retried.
+- **Honest refusal** — if the top retrieval score falls below the configured floor, the system says *"the corpus does not contain enough information"* instead of inventing an answer.
+- **One retrieval impl, three consumers** — the ingestion script, the Next.js web app, and the MCP server all call the same `retrieve()` from `packages/shared`.
+
+## Architecture
+
+```mermaid
+flowchart TB
+    subgraph DataLayer["Data layer"]
+        direction LR
+        SB[("Supabase Postgres<br/>• papers · chunks<br/>• vector(1024) + tsvector<br/>• hybrid_search RPC")]
+    end
+
+    subgraph Sources["Sources"]
+        direction LR
+        AWS["docs.aws.amazon.com<br/>(21 PDFs)"]
+    end
+
+    subgraph Embed["Embedding · LLM"]
+        direction LR
+        VG["Voyage AI<br/>voyage-3-large @ 1024"]
+        GM["Gemini 2.5 Flash<br/>(JSON schema output)"]
+    end
+
+    subgraph Consumers["Consumers"]
+        direction LR
+        ING["packages/ingestion<br/>(local CLI)"]
+        WEB["apps/web<br/>(Next.js · Vercel)"]
+        MCP["packages/mcp-server<br/>(Claude Desktop · stdio)"]
+    end
+
+    AWS -->|scrape + download| ING
+    ING -->|parse · chunk · embed| VG
+    ING -->|insert| SB
+
+    WEB -->|embed query| VG
+    WEB -->|hybrid_search RPC| SB
+    WEB -->|generateAnswer| GM
+
+    MCP -->|search_papers / list_papers / get_paper| SB
+    MCP -->|embed query| VG
 ```
-            ┌──────────────────┐
-            │  Supabase        │
-            │  papers · chunks │
-            │  pgvector + FTS  │
-            └────────▲─────────┘
-                     │
-    ┌────────────────┼────────────────┐
-    │                │                │
-┌───┴─────┐    ┌─────┴─────┐    ┌─────┴─────┐
-│Ingestion│    │ Next.js   │    │MCP server │
-│(local)  │    │(Vercel)   │    │(local)    │
-└─────────┘    └───────────┘    └───────────┘
-```
 
-## What it does
+All three consumers share `packages/shared` — one `retrieve()`, one prompt builder, one citation validator.
 
-- **Ask** — type an AWS question, get a 2–4 paragraph answer with inline `[c#]` citations that resolve to the exact source passage (paper title, page, heading path).
-- **Refuse honestly** — if the top retrieval score is below threshold, the system says so instead of inventing facts.
-- **Browse** — see the full corpus and per-paper structure.
-- **MCP** — expose `search_papers`, `list_papers`, `get_paper` to Claude Desktop so it can fetch grounded AWS context inside any chat.
+## Screenshots
 
-See [docs/PDD.md](./docs/PDD.md) for product design and [docs/TDD.md](./docs/TDD.md) for technical design.
+| Home | Browse corpus |
+|---|---|
+| ![Home](docs/screenshots/01-home.png) | ![Papers index](docs/screenshots/05-papers.png) |
+
+| Loading skeleton | MCP setup guide |
+|---|---|
+| ![Loading](docs/screenshots/02-loading.png) | ![MCP setup](docs/screenshots/06-mcp.png) |
 
 ## Quickstart
 
@@ -38,15 +86,19 @@ pnpm install
 
 # 2. Configure
 cp .env.example .env.local
-# fill in Supabase + Gemini keys
+# fill in Supabase + Voyage + Gemini keys
 
-# 3. Validate corpus URLs (writes data/corpus.json)
+# 3. Apply the schema (uses supabase CLI, links to your project)
+supabase link --project-ref <your-project-ref>
+supabase db push
+
+# 4. Validate corpus URLs (writes packages/ingestion/data/corpus.json)
 pnpm ingest:scrape
 
-# 4. Download, chunk, embed, insert
+# 5. Download, chunk, embed, insert
 pnpm ingest
 
-# 5. Run the web app
+# 6. Run the web app
 pnpm dev
 # open http://localhost:3000
 ```
@@ -58,42 +110,61 @@ apps/web/                    Next.js 14 App Router web app
 packages/shared/             retrieval, embed, llm, supabase, types — one impl, three consumers
 packages/mcp-server/         MCP stdio server for Claude Desktop
 packages/ingestion/          local script: scrape → download → chunk → embed → insert
-docs/                        PDD, TDD, GOAL
+supabase/migrations/         schema migrations applied via `supabase db push`
+docs/                        PDD, TDD, GOAL, screenshots
 ```
 
-## Architecture in one paragraph
+## Tech stack
 
-The ingestion script downloads AWS whitepaper PDFs from `docs.aws.amazon.com`, splits them into ~500-token chunks on heading boundaries, embeds each chunk via Gemini `text-embedding-004`, and inserts rows into Supabase with both a `vector(768)` column and a generated `tsvector`. At query time, both the Next.js app and the MCP server call `retrieve()` from `packages/shared`, which fires a single Postgres RPC (`hybrid_search`) that joins the top-30 vector hits with the top-30 FTS hits and ranks them by `0.6 * vec_score + 0.4 * fts_score`. The top 8 chunks are labeled `[c1] … [c8]` and sent to Gemini 2.5 Flash under a strict JSON schema; the server then verifies every citation label appears in the retrieved set before returning the response.
-
-## Setting up Supabase
-
-Create a free Supabase project, then run the SQL migration (also reproduced inside the project setup prompt). It creates `papers`, `chunks` (with `vector(768)` and generated `tsvector`), `queries`, an HNSW index for vector similarity, a GIN index for FTS, and an RPC `hybrid_search(query_embedding, query_text, match_count, vector_weight, fts_weight, paper_filter)`.
+| Layer | Choice | Why |
+|---|---|---|
+| Frontend | Next.js 14 App Router · TypeScript strict | Mature, edge-ready, type-safe. |
+| Styling | Tailwind + shadcn-style primitives + framer-motion | Fast iteration, clean dark theme. |
+| Database | Supabase Postgres + pgvector | Vector + relational + free tier. |
+| Embeddings | Voyage AI `voyage-3-large` @ 1024 dims | Anthropic-recommended; 200M free tokens/month covers ingestion + queries. |
+| LLM | Gemini 2.5 Flash | Cheap, fast, structured-output via JSON schema. |
+| PDF parsing | `pdf-parse` | Per-page text extraction. |
+| MCP | `@modelcontextprotocol/sdk` (stdio) | Standard MCP TypeScript SDK. |
+| Hosting | Vercel (web) · local (MCP server + ingestion) | Free tier, zero infra. |
+| Monorepo | pnpm workspaces | Single install, shared types. |
 
 ## Setting up the MCP server in Claude Desktop
 
 ```bash
-pnpm mcp:build
+pnpm install
 ```
 
-Add to `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS):
+Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS):
 
 ```json
 {
   "mcpServers": {
     "whitepaper-ai": {
-      "command": "node",
-      "args": ["/absolute/path/to/whitepaper-ai/packages/mcp-server/dist/index.js"],
+      "command": "/absolute/path/to/whitepaper-ai/node_modules/.bin/tsx",
+      "args": [
+        "/absolute/path/to/whitepaper-ai/packages/mcp-server/src/index.ts"
+      ],
       "env": {
         "NEXT_PUBLIC_SUPABASE_URL": "...",
         "NEXT_PUBLIC_SUPABASE_ANON_KEY": "...",
-        "GEMINI_API_KEY": "..."
+        "VOYAGE_API_KEY": "...",
+        "VOYAGE_EMBED_MODEL": "voyage-3-large",
+        "VOYAGE_EMBED_DIMENSIONS": "1024",
+        "GEMINI_API_KEY": "...",
+        "GEMINI_LLM_MODEL": "gemini-2.5-flash"
       }
     }
   }
 }
 ```
 
-Restart Claude Desktop. Try `"How does AWS Lambda handle cold starts?"` — Claude will call `search_papers` automatically.
+Quit and reopen Claude Desktop. Try *"Search whitepaper-ai for AWS Lambda cold-start mitigation strategies."* — Claude will call `search_papers` automatically.
+
+The MCP server exposes three tools:
+
+- **`search_papers(query, limit?)`** — hybrid retrieval across the corpus
+- **`list_papers()`** — every paper in the corpus
+- **`get_paper(slug)`** — paper metadata + inferred table of contents
 
 ## Environment variables
 
@@ -102,14 +173,16 @@ Restart Claude Desktop. Try `"How does AWS Lambda handle cold starts?"` — Clau
 | `NEXT_PUBLIC_SUPABASE_URL` | yes | Supabase project URL |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | yes | Anon key for read access |
 | `SUPABASE_SERVICE_ROLE_KEY` | ingestion + analytics | Service-role key (server-side only) |
+| `VOYAGE_API_KEY` | yes | https://dashboard.voyageai.com |
+| `VOYAGE_EMBED_MODEL` | no | default `voyage-3-large` |
+| `VOYAGE_EMBED_DIMENSIONS` | no | default `1024` |
 | `GEMINI_API_KEY` | yes | https://aistudio.google.com/apikey |
 | `GEMINI_LLM_MODEL` | no | default `gemini-2.5-flash` |
-| `GEMINI_EMBED_MODEL` | no | default `text-embedding-004` |
 | `RETRIEVAL_TOP_K` | no | default 8 |
 | `RETRIEVAL_VECTOR_WEIGHT` | no | default 0.6 |
 | `RETRIEVAL_FTS_WEIGHT` | no | default 0.4 |
 | `RETRIEVAL_REFUSAL_THRESHOLD` | no | default 0.4 |
-| `INGEST_CONCURRENCY` | no | default 2 |
+| `INGEST_CONCURRENCY` | no | default 1 |
 
 ## Scripts
 
@@ -117,7 +190,8 @@ Restart Claude Desktop. Try `"How does AWS Lambda handle cold starts?"` — Clau
 pnpm dev               # next dev for apps/web
 pnpm build             # build all workspaces
 pnpm typecheck         # tsc --noEmit across all workspaces
-pnpm ingest:scrape     # validate seed URLs → data/corpus.json
+pnpm test              # vitest in packages/shared (chunker, citation extractor, refusal)
+pnpm ingest:scrape     # validate seed URLs → packages/ingestion/data/corpus.json
 pnpm ingest            # download + parse + chunk + embed + insert
 pnpm mcp               # start the MCP server (stdio)
 pnpm mcp:build         # build the MCP server to dist/
@@ -125,17 +199,23 @@ pnpm mcp:build         # build the MCP server to dist/
 
 ## Quality bar
 
-- TypeScript strict, no `any`
-- Input validation via Zod at every API boundary
-- Citation labels verified server-side; hallucinated citations cause one retry then a hard failure
-- All UI states (loading, error, empty, refusal) explicitly designed
-- Mobile responsive at 390px
+- TypeScript **strict** mode across 4 workspaces — no `any`, no `@ts-ignore`.
+- Zod validation at every API boundary.
+- Citation labels verified server-side; hallucinated citations cause one retry then a hard failure.
+- All UI states (loading, error, empty, refusal) explicitly designed.
+- 16 unit tests covering the chunker, citation extractor, and refusal threshold.
+- Mobile responsive (390 px viewport tested).
+- Vercel Analytics + Speed Insights wired in.
+
+## Design docs
+
+Full product and technical design lives in [docs/PDD.md](./docs/PDD.md) and [docs/TDD.md](./docs/TDD.md).
 
 ## Future work
 
 - Per-paper search filter in the UI
-- Conversation history (follow-up questions)
-- Reranker (cross-encoder) over the top-30 hybrid set
+- Conversation follow-ups (history is wired in the schema, not the UI yet)
+- Cross-encoder reranker over the top-30 hybrid set
 - OCR fallback for image-only PDFs
 
 ## License
