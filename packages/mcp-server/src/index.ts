@@ -1,5 +1,13 @@
 #!/usr/bin/env node
-import "dotenv/config";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { config as loadDotenv } from "dotenv";
+
+const __envFilename = fileURLToPath(import.meta.url);
+const __envDirname = path.dirname(__envFilename);
+loadDotenv({ path: path.resolve(__envDirname, "..", "..", "..", ".env.local") });
+loadDotenv({ path: path.resolve(__envDirname, "..", "..", "..", ".env") });
+
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import {
