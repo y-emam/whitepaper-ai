@@ -114,7 +114,7 @@ async function callVoyageWithRetry(inputs: string[], taskKind: EmbedTaskType): P
     : new Error("Voyage embed failed after retries");
 }
 
-function packBatches(texts: string[]): string[][] {
+export function packBatches(texts: string[]): string[][] {
   const batches: string[][] = [];
   let current: string[] = [];
   let tokens = 0;
