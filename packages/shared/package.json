@@ -1,0 +1,30 @@
+{
+  "name": "@whitepaper-ai/shared",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./retrieval": "./src/retrieval.ts",
+    "./embed": "./src/embed.ts",
+    "./llm": "./src/llm.ts",
+    "./supabase": "./src/supabase.ts",
+    "./prompts": "./src/prompts/answer.ts",
+    "./types": "./src/types.ts",
+    "./env": "./src/env.ts",
+    "./chunking": "./src/chunking.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "@supabase/supabase-js": "^2.46.1",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3"
+  }
+}

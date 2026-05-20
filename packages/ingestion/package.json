@@ -1,0 +1,24 @@
+{
+  "name": "@whitepaper-ai/ingestion",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/ingest.ts",
+    "scrape": "tsx src/scrape.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@whitepaper-ai/shared": "workspace:*",
+    "cheerio": "^1.0.0",
+    "dotenv": "^16.4.5",
+    "p-limit": "^6.2.0",
+    "pdf-parse": "^1.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.1",
+    "@types/pdf-parse": "^1.1.4",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  }
+}

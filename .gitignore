@@ -1,0 +1,33 @@
+# Dependencies
+node_modules
+.pnpm-store
+
+# Next.js
+.next
+out
+.vercel
+
+# Build outputs
+dist
+build
+*.tsbuildinfo
+
+# Env
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Ingestion artifacts
+data/pdfs
+data/raw
+data/cache
+*.pdf
+
+# Misc
+.DS_Store
+*.log
+.idea
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json

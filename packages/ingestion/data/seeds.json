@@ -1,0 +1,63 @@
+{
+  "$schema": "Each seed needs a slug + title. source_url overrides the default 'docs.aws.amazon.com/pdfs/whitepapers/latest/{slug}/{slug}.pdf' pattern.",
+  "seeds": [
+    { "slug": "aws-overview", "title": "Overview of Amazon Web Services" },
+    { "slug": "aws-overview-security-processes", "title": "Amazon Web Services: Overview of Security Processes" },
+    { "slug": "introduction-aws-security", "title": "Introduction to AWS Security" },
+    { "slug": "aws-security-best-practices", "title": "AWS Security Best Practices" },
+    { "slug": "aws-best-practices-ddos-resiliency", "title": "AWS Best Practices for DDoS Resiliency" },
+    { "slug": "aws-key-management-service-best-practices", "title": "AWS Key Management Service Best Practices" },
+    { "slug": "logical-separation", "title": "Logical Separation on AWS" },
+    { "slug": "architecting-for-the-cloud", "title": "Architecting for the Cloud: AWS Best Practices" },
+    { "slug": "modern-application-development-on-aws", "title": "Modern Application Development on AWS" },
+    { "slug": "microservices-on-aws", "title": "Microservices on AWS" },
+    { "slug": "serverless-architectures-with-aws-lambda", "title": "Serverless Architectures with AWS Lambda" },
+    { "slug": "serverless-multi-tier-architectures-api-gateway-lambda", "title": "Serverless Multi-Tier Architectures with API Gateway and AWS Lambda" },
+    { "slug": "disaster-recovery-workloads-on-aws", "title": "Disaster Recovery of Workloads on AWS: Recovery in the Cloud" },
+    { "slug": "real-time-communication-on-aws", "title": "Real-Time Communication on AWS" },
+    { "slug": "amazon-vpc-connectivity-options", "title": "Amazon Virtual Private Cloud Connectivity Options" },
+    { "slug": "web-application-hosting-best-practices", "title": "Web Application Hosting in the AWS Cloud" },
+    { "slug": "data-warehousing-on-aws", "title": "Data Warehousing on AWS" },
+    {
+      "slug": "wellarchitected-framework",
+      "title": "AWS Well-Architected Framework",
+      "source_url": "https://docs.aws.amazon.com/pdfs/wellarchitected/latest/framework/wellarchitected-framework.pdf"
+    },
+    {
+      "slug": "wellarchitected-security-pillar",
+      "title": "Security Pillar — AWS Well-Architected Framework",
+      "source_url": "https://docs.aws.amazon.com/pdfs/wellarchitected/latest/security-pillar/wellarchitected-security-pillar.pdf"
+    },
+    {
+      "slug": "wellarchitected-reliability-pillar",
+      "title": "Reliability Pillar — AWS Well-Architected Framework",
+      "source_url": "https://docs.aws.amazon.com/pdfs/wellarchitected/latest/reliability-pillar/wellarchitected-reliability-pillar.pdf"
+    },
+    {
+      "slug": "wellarchitected-operational-excellence-pillar",
+      "title": "Operational Excellence Pillar — AWS Well-Architected Framework",
+      "source_url": "https://docs.aws.amazon.com/pdfs/wellarchitected/latest/operational-excellence-pillar/wellarchitected-operational-excellence-pillar.pdf"
+    },
+    {
+      "slug": "wellarchitected-cost-optimization-pillar",
+      "title": "Cost Optimization Pillar — AWS Well-Architected Framework",
+      "source_url": "https://docs.aws.amazon.com/pdfs/wellarchitected/latest/cost-optimization-pillar/wellarchitected-cost-optimization-pillar.pdf"
+    },
+    {
+      "slug": "wellarchitected-performance-efficiency-pillar",
+      "title": "Performance Efficiency Pillar — AWS Well-Architected Framework",
+      "source_url": "https://docs.aws.amazon.com/pdfs/wellarchitected/latest/performance-efficiency-pillar/wellarchitected-performance-efficiency-pillar.pdf"
+    },
+    {
+      "slug": "wellarchitected-sustainability-pillar",
+      "title": "Sustainability Pillar — AWS Well-Architected Framework",
+      "source_url": "https://docs.aws.amazon.com/pdfs/wellarchitected/latest/sustainability-pillar/wellarchitected-sustainability-pillar.pdf"
+    },
+    { "slug": "build-modern-apps-aws", "title": "Build Modern Applications on AWS" },
+    { "slug": "running-containerized-microservices-on-aws", "title": "Running Containerized Microservices on AWS" },
+    { "slug": "aws-cloud-adoption-framework", "title": "AWS Cloud Adoption Framework" },
+    { "slug": "amazon-eks-best-practices-guide", "title": "Amazon EKS Best Practices Guide" },
+    { "slug": "container-security", "title": "AWS Container Security Best Practices" },
+    { "slug": "aws-multi-region-fundamentals", "title": "AWS Multi-Region Fundamentals" }
+  ]
+}
