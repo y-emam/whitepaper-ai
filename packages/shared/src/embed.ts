@@ -4,14 +4,16 @@ const VOYAGE_ENDPOINT = "https://api.voyageai.com/v1/embeddings";
 
 const VOYAGE_MAX_INPUTS_PER_REQUEST = 128;
 const VOYAGE_MAX_INPUT_CHARS = 32_000;
-
-// Free-tier limits (no payment method on file): 3 RPM and 10K TPM.
-// We keep ourselves comfortably under both with a 60s gap between requests
-// and a per-request token ceiling.
-const REQUEST_INTERVAL_MS = 62_000;
-const TOKEN_BUDGET_PER_REQUEST = 8_000;
 const CHARS_PER_TOKEN = 4;
 const MAX_429_RETRIES = 4;
+
+// Voyage rate limits depend on your billing tier:
+// - Free (no card): 3 RPM / 10K TPM — set VOYAGE_REQUEST_INTERVAL_MS=62000 and VOYAGE_TOKEN_BUDGET=8000
+// - Tier 1 (card on file): ~2K RPM / millions TPM — defaults below are safe
+// The throttle serializes all calls through one chain; setting interval to 0
+// skips the wait entirely.
+const REQUEST_INTERVAL_MS = parseInt(process.env.VOYAGE_REQUEST_INTERVAL_MS ?? "0", 10);
+const TOKEN_BUDGET_PER_REQUEST = parseInt(process.env.VOYAGE_TOKEN_BUDGET ?? "120000", 10);
 
 interface VoyageEmbedResponse {
   data: Array<{ embedding: number[]; index: number }>;
@@ -37,6 +39,11 @@ function estimateTokens(text: string): number {
 let throttleChain: Promise<void> = Promise.resolve();
 
 function throttle<T>(work: () => Promise<T>): Promise<T> {
+  if (REQUEST_INTERVAL_MS <= 0) {
+    // No throttle configured — run concurrently, let Voyage's own rate
+    // limits push back if anything goes wrong (handled by the 429 retry).
+    return work();
+  }
   const my = throttleChain.then(async () => {
     const started = Date.now();
     try {
