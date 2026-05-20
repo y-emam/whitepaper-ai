@@ -1,8 +1,13 @@
-import "dotenv/config";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { config as loadDotenv } from "dotenv";
 import pLimit from "p-limit";
+
+const __envFilename = fileURLToPath(import.meta.url);
+const __envDirname = path.dirname(__envFilename);
+loadDotenv({ path: path.resolve(__envDirname, "..", "..", "..", ".env.local") });
+loadDotenv({ path: path.resolve(__envDirname, "..", "..", "..", ".env") });
 import {
   chunkPages,
   embedBatch,
@@ -12,8 +17,8 @@ import {
 import { parsePdf, type PageBlock } from "./pdf.js";
 import { scrape } from "./scrape.js";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __filename = __envFilename;
+const __dirname = __envDirname;
 
 const CORPUS_PATH = path.join(__dirname, "..", "data", "corpus.json");
 const CACHE_DIR = path.join(__dirname, "..", "data", "cache");

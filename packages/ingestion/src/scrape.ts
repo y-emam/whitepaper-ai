@@ -1,11 +1,16 @@
-import "dotenv/config";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { config as loadDotenv } from "dotenv";
 import pLimit from "p-limit";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __envFilename = fileURLToPath(import.meta.url);
+const __envDirname = path.dirname(__envFilename);
+loadDotenv({ path: path.resolve(__envDirname, "..", "..", "..", ".env.local") });
+loadDotenv({ path: path.resolve(__envDirname, "..", "..", "..", ".env") });
+
+const __filename = __envFilename;
+const __dirname = __envDirname;
 
 const SEEDS_PATH = path.join(__dirname, "..", "data", "seeds.json");
 const CORPUS_OUT_PATH = path.join(__dirname, "..", "data", "corpus.json");

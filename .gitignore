@@ -24,6 +24,10 @@ data/raw
 data/cache
 *.pdf
 
+# Supabase local CLI state
+supabase/.temp
+supabase/.branches
+
 # Misc
 .DS_Store
 *.log
