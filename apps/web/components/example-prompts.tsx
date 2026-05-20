@@ -7,7 +7,7 @@ export const EXAMPLE_QUESTIONS = [
   "What are the pillars of the AWS Well-Architected Framework?",
   "How should I architect resilient microservices on AWS?",
   "What are AWS best practices for disaster recovery?",
-  "How does AWS handle logical separation between tenants?"
+  "How should I architect for cost optimization on AWS?"
 ];
 
 interface ExamplePromptsProps {
