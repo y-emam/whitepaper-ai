@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Header } from "@/components/header";
 import "./globals.css";
 
@@ -22,6 +24,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-screen font-sans">
         <Header />
         <main className="mx-auto max-w-4xl px-4 pb-24 pt-8 sm:px-6 lg:px-8">{children}</main>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

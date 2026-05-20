@@ -1,0 +1,24 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "whitepaper .ai" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img [ref=e6]
+        - generic [ref=e8]: whitepaper
+        - generic [ref=e9]: .ai
+      - navigation [ref=e10]:
+        - link "Browse papers" [ref=e76] [cursor=pointer]:
+          - /url: /papers
+        - link "MCP server" [ref=e77] [cursor=pointer]:
+          - /url: /mcp
+        - link "GitHub" [ref=e11] [cursor=pointer]:
+          - /url: https://github.com
+          - img [ref=e12]
+  - main [ref=e15]:
+    - generic [ref=e16]:
+      - generic [ref=e25]:
+        - textbox "Ask anything about AWS architecture, security, services…" [ref=e26]: What are the five pillars of the Well-Architected Framework?
+        - button "Ask" [ref=e27] [cursor=pointer]:
+          - img [ref=e78]
+      - generic [ref=e80]: Could not search the corpus. Try again.
+  - alert [ref=e75]

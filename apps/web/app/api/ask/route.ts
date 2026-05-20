@@ -44,6 +44,14 @@ export async function POST(req: Request): Promise<NextResponse<AskResponse | Api
     chunks = await retrieve(question);
   } catch (e) {
     console.error("[ask] retrieval failed:", e);
+    const msg = e instanceof Error ? e.message : String(e);
+    if (/429|rate|quota/i.test(msg)) {
+      return errorResponse(
+        429,
+        "rate_limited",
+        "The embedding service is currently rate-limited. Please retry in about a minute."
+      );
+    }
     return errorResponse(500, "retrieval_failed", "Could not search the corpus. Try again.");
   }
 
@@ -64,6 +72,14 @@ export async function POST(req: Request): Promise<NextResponse<AskResponse | Api
     result = await generateAnswer({ question, chunks });
   } catch (e) {
     console.error("[ask] generation failed:", e);
+    const msg = e instanceof Error ? e.message : String(e);
+    if (/429|rate|quota/i.test(msg)) {
+      return errorResponse(
+        429,
+        "rate_limited",
+        "The LLM service is currently rate-limited. Please retry in about a minute."
+      );
+    }
     return errorResponse(500, "generation_failed", "Failed to generate an answer. Try again.");
   }
 

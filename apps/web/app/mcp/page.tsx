@@ -29,10 +29,9 @@ export default function McpPage() {
 
       <section className="mt-8 space-y-6">
         <Step n={1} title="Clone and build">
-          <CodeBlock>{`git clone https://github.com/your-user/whitepaper-ai
+          <CodeBlock>{`git clone https://github.com/y-emam/whitepaper-ai
 cd whitepaper-ai
-pnpm install
-pnpm mcp:build`}</CodeBlock>
+pnpm install`}</CodeBlock>
         </Step>
 
         <Step n={2} title="Set env variables for the server">
@@ -45,17 +44,23 @@ pnpm mcp:build`}</CodeBlock>
         <Step n={3} title="Add to Claude Desktop config">
           <p className="mb-3 text-sm text-muted-foreground">
             Edit <span className="font-mono">~/Library/Application Support/Claude/claude_desktop_config.json</span>{" "}
-            (macOS) or the equivalent on your OS:
+            (macOS) or the equivalent on your OS. The server runs via{" "}
+            <span className="font-mono">tsx</span> from the workspace&apos;s{" "}
+            <span className="font-mono">node_modules</span>:
           </p>
           <CodeBlock>{`{
   "mcpServers": {
     "whitepaper-ai": {
-      "command": "node",
-      "args": ["/absolute/path/to/whitepaper-ai/packages/mcp-server/dist/index.js"],
+      "command": "/absolute/path/to/whitepaper-ai/node_modules/.bin/tsx",
+      "args": ["/absolute/path/to/whitepaper-ai/packages/mcp-server/src/index.ts"],
       "env": {
         "NEXT_PUBLIC_SUPABASE_URL": "...",
         "NEXT_PUBLIC_SUPABASE_ANON_KEY": "...",
-        "GEMINI_API_KEY": "..."
+        "VOYAGE_API_KEY": "...",
+        "VOYAGE_EMBED_MODEL": "voyage-3-large",
+        "VOYAGE_EMBED_DIMENSIONS": "1024",
+        "GEMINI_API_KEY": "...",
+        "GEMINI_LLM_MODEL": "gemini-2.5-flash"
       }
     }
   }

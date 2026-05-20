@@ -26,7 +26,7 @@ export function Header() {
             MCP server
           </Link>
           <a
-            href="https://github.com"
+            href="https://github.com/y-emam/whitepaper-ai"
             target="_blank"
             rel="noreferrer"
             className="grid h-8 w-8 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
