@@ -10,6 +10,7 @@ import {
   type Citation
 } from "@whitepaper-ai/shared";
 import { getAdminClient } from "@whitepaper-ai/shared";
+import { checkRateLimit, getClientIp } from "@/lib/ratelimit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -18,12 +19,32 @@ interface ApiError {
   error: { type: string; message: string };
 }
 
-function errorResponse(status: number, type: string, message: string): NextResponse<ApiError> {
-  return NextResponse.json({ error: { type, message } }, { status });
+function errorResponse(
+  status: number,
+  type: string,
+  message: string,
+  extraHeaders?: Record<string, string>
+): NextResponse<ApiError> {
+  return NextResponse.json(
+    { error: { type, message } },
+    { status, headers: extraHeaders }
+  );
 }
 
 export async function POST(req: Request): Promise<NextResponse<AskResponse | ApiError>> {
   const start = Date.now();
+
+  const ip = getClientIp(req);
+  const limit = await checkRateLimit(ip);
+  if (!limit.ok) {
+    const retryAfter = String(limit.retryAfterSec ?? 60);
+    const friendly =
+      limit.scope === "daily"
+        ? `Daily request cap reached. Try again in ~${Math.ceil((limit.retryAfterSec ?? 0) / 3600)}h.`
+        : `Too many requests. Try again in ${limit.retryAfterSec ?? 60}s.`;
+    return errorResponse(429, "rate_limited", friendly, { "Retry-After": retryAfter });
+  }
+
   let body: unknown;
   try {
     body = await req.json();
