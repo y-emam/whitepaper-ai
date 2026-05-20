@@ -105,10 +105,17 @@ export async function generateAnswer({ question, chunks }: GenerateAnswerInput):
 }
 
 export function extractInlineLabels(text: string): string[] {
-  const re = /\[(c\d+)\]/gi;
+  // Accepts both [c1] (single) and [c1, c2, c3] (bundled — Gemini sometimes
+  // emits this even when instructed not to). Captures one bracket group at
+  // a time and splits the inner content on commas.
+  const re = /\[((?:c\d+)(?:\s*,\s*c\d+)*)\]/gi;
   const out: string[] = [];
   for (const match of text.matchAll(re)) {
-    if (match[1]) out.push(match[1].toLowerCase());
+    const inner = match[1];
+    if (!inner) continue;
+    for (const part of inner.split(/\s*,\s*/)) {
+      if (part) out.push(part.toLowerCase());
+    }
   }
   return out;
 }

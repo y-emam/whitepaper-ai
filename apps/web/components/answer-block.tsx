@@ -13,7 +13,7 @@ interface AnswerBlockProps {
   question: string;
 }
 
-const INLINE_CITATION = /\[(c\d+)\]/gi;
+const INLINE_CITATION = /\[((?:c\d+)(?:\s*,\s*c\d+)*)\]/gi;
 
 export function AnswerBlock({ response, question }: AnswerBlockProps) {
   const [activeCitation, setActiveCitation] = useState<Citation | null>(null);
@@ -130,24 +130,26 @@ function renderAnswer(
     for (const match of para.matchAll(INLINE_CITATION)) {
       const start = match.index ?? 0;
       const end = start + match[0].length;
-      const labelRaw = match[1];
+      const inner = match[1] ?? "";
       if (start > lastEnd) {
         nodes.push(
           <Fragment key={`t-${pIdx}-${counter}`}>{para.slice(lastEnd, start)}</Fragment>
         );
       }
-      const label = labelRaw ? labelRaw.toLowerCase() : "";
-      const idx = labelToIndex.get(label);
-      if (idx) {
-        nodes.push(
-          <CitationBadge
-            key={`c-${pIdx}-${counter}`}
-            label={label}
-            index={idx}
-            onClick={onClick}
-          />
-        );
-      }
+      const labels = inner.split(/\s*,\s*/).map((s) => s.toLowerCase()).filter(Boolean);
+      labels.forEach((label, j) => {
+        const idx = labelToIndex.get(label);
+        if (idx) {
+          nodes.push(
+            <CitationBadge
+              key={`c-${pIdx}-${counter}-${j}`}
+              label={label}
+              index={idx}
+              onClick={onClick}
+            />
+          );
+        }
+      });
       lastEnd = end;
       counter += 1;
     }

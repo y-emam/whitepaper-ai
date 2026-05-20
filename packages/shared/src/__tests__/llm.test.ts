@@ -24,4 +24,18 @@ describe("extractInlineLabels", () => {
   it("ignores non-c-prefixed bracketed text", () => {
     expect(extractInlineLabels("a [note] and [c5] mix")).toEqual(["c5"]);
   });
+
+  it("expands bundled citations like [c1, c2, c3] into individual labels", () => {
+    expect(extractInlineLabels("The framework has six pillars [c1, c2, c3].")).toEqual([
+      "c1",
+      "c2",
+      "c3"
+    ]);
+  });
+
+  it("handles mixed bundled and single citations", () => {
+    expect(
+      extractInlineLabels("First claim [c1, c2] and second claim [c3] and third [C4, c5].")
+    ).toEqual(["c1", "c2", "c3", "c4", "c5"]);
+  });
 });
