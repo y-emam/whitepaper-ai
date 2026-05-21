@@ -233,6 +233,78 @@
       "title": "Navigating GDPR Compliance on AWS",
       "source_url": "https://docs.aws.amazon.com/pdfs/whitepapers/latest/navigating-gdpr-compliance/navigating-gdpr-compliance.pdf",
       "size_bytes": 1135763
+    },
+    {
+      "slug": "containers-on-aws",
+      "title": "Containers on AWS",
+      "source_url": "https://docs.aws.amazon.com/pdfs/whitepapers/latest/containers-on-aws/containers-on-aws.pdf",
+      "size_bytes": 516637
+    },
+    {
+      "slug": "overview-deployment-options",
+      "title": "Overview of Deployment Options on AWS",
+      "source_url": "https://docs.aws.amazon.com/pdfs/whitepapers/latest/overview-deployment-options/overview-deployment-options.pdf",
+      "size_bytes": 685716
+    },
+    {
+      "slug": "hybrid-connectivity",
+      "title": "Hybrid Connectivity",
+      "source_url": "https://docs.aws.amazon.com/pdfs/whitepapers/latest/hybrid-connectivity/hybrid-connectivity.pdf",
+      "size_bytes": 2466308
+    },
+    {
+      "slug": "hybrid-cloud-with-aws",
+      "title": "Hybrid Cloud with AWS",
+      "source_url": "https://docs.aws.amazon.com/pdfs/whitepapers/latest/hybrid-cloud-with-aws/hybrid-cloud-with-aws.pdf",
+      "size_bytes": 734985
+    },
+    {
+      "slug": "building-scalable-secure-multi-vpc-network-infrastructure",
+      "title": "Building a Scalable and Secure Multi-VPC AWS Network Infrastructure",
+      "source_url": "https://docs.aws.amazon.com/pdfs/whitepapers/latest/building-scalable-secure-multi-vpc-network-infrastructure/building-scalable-secure-multi-vpc-network-infrastructure.pdf",
+      "size_bytes": 5115898
+    },
+    {
+      "slug": "overview-aws-cloud-data-migration-services",
+      "title": "Overview of AWS Cloud Data Migration Services",
+      "source_url": "https://docs.aws.amazon.com/pdfs/whitepapers/latest/overview-aws-cloud-data-migration-services/overview-aws-cloud-data-migration-services.pdf",
+      "size_bytes": 580095
+    },
+    {
+      "slug": "how-aws-pricing-works",
+      "title": "How AWS Pricing Works",
+      "source_url": "https://docs.aws.amazon.com/pdfs/whitepapers/latest/how-aws-pricing-works/how-aws-pricing-works.pdf",
+      "size_bytes": 728931
+    },
+    {
+      "slug": "aws-security-incident-response-guide",
+      "title": "AWS Security Incident Response Guide",
+      "source_url": "https://docs.aws.amazon.com/pdfs/whitepapers/latest/aws-security-incident-response-guide/aws-security-incident-response-guide.pdf",
+      "size_bytes": 895320
+    },
+    {
+      "slug": "architecting-hipaa-security-and-compliance-on-aws",
+      "title": "Architecting for HIPAA Security and Compliance on AWS",
+      "source_url": "https://docs.aws.amazon.com/pdfs/whitepapers/latest/architecting-hipaa-security-and-compliance-on-aws/architecting-hipaa-security-and-compliance-on-aws.pdf",
+      "size_bytes": 154721
+    },
+    {
+      "slug": "ransomware-risk-management-on-aws-using-nist-csf",
+      "title": "Ransomware Risk Management on AWS Using the NIST CSF",
+      "source_url": "https://docs.aws.amazon.com/pdfs/whitepapers/latest/ransomware-risk-management-on-aws-using-nist-csf/ransomware-risk-management-on-aws-using-nist-csf.pdf",
+      "size_bytes": 815998
+    },
+    {
+      "slug": "securing-iot-with-aws",
+      "title": "Securing Internet of Things (IoT) with AWS",
+      "source_url": "https://docs.aws.amazon.com/pdfs/whitepapers/latest/securing-iot-with-aws/securing-iot-with-aws.pdf",
+      "size_bytes": 725240
+    },
+    {
+      "slug": "public-sector-cloud-transformation",
+      "title": "Public Sector Cloud Transformation",
+      "source_url": "https://docs.aws.amazon.com/pdfs/whitepapers/latest/public-sector-cloud-transformation/public-sector-cloud-transformation.pdf",
+      "size_bytes": 1063331
     }
   ]
 }

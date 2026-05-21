@@ -72,6 +72,18 @@
     { "slug": "machine-learning-foundations-on-aws", "title": "Machine Learning Foundations on AWS" },
     { "slug": "aws-key-management-service-cryptographic-details", "title": "AWS Key Management Service Cryptographic Details" },
     { "slug": "running-containerized-microservices-on-aws", "title": "Running Containerized Microservices on AWS" },
-    { "slug": "build-modern-apps-aws", "title": "Build Modern Applications on AWS" }
+    { "slug": "build-modern-apps-aws", "title": "Build Modern Applications on AWS" },
+    { "slug": "containers-on-aws", "title": "Containers on AWS" },
+    { "slug": "overview-deployment-options", "title": "Overview of Deployment Options on AWS" },
+    { "slug": "hybrid-connectivity", "title": "Hybrid Connectivity" },
+    { "slug": "hybrid-cloud-with-aws", "title": "Hybrid Cloud with AWS" },
+    { "slug": "building-scalable-secure-multi-vpc-network-infrastructure", "title": "Building a Scalable and Secure Multi-VPC AWS Network Infrastructure" },
+    { "slug": "overview-aws-cloud-data-migration-services", "title": "Overview of AWS Cloud Data Migration Services" },
+    { "slug": "how-aws-pricing-works", "title": "How AWS Pricing Works" },
+    { "slug": "aws-security-incident-response-guide", "title": "AWS Security Incident Response Guide" },
+    { "slug": "architecting-hipaa-security-and-compliance-on-aws", "title": "Architecting for HIPAA Security and Compliance on AWS" },
+    { "slug": "ransomware-risk-management-on-aws-using-nist-csf", "title": "Ransomware Risk Management on AWS Using the NIST CSF" },
+    { "slug": "securing-iot-with-aws", "title": "Securing Internet of Things (IoT) with AWS" },
+    { "slug": "public-sector-cloud-transformation", "title": "Public Sector Cloud Transformation" }
   ]
 }
