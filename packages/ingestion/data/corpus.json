@@ -37,16 +37,16 @@
       "size_bytes": 414187
     },
     {
-      "slug": "modern-application-development-on-aws",
-      "title": "Modern Application Development on AWS",
-      "source_url": "https://docs.aws.amazon.com/pdfs/whitepapers/latest/modern-application-development-on-aws/modern-application-development-on-aws.pdf",
-      "size_bytes": 154869
-    },
-    {
       "slug": "microservices-on-aws",
       "title": "Microservices on AWS",
       "source_url": "https://docs.aws.amazon.com/pdfs/whitepapers/latest/microservices-on-aws/microservices-on-aws.pdf",
       "size_bytes": 2277404
+    },
+    {
+      "slug": "modern-application-development-on-aws",
+      "title": "Modern Application Development on AWS",
+      "source_url": "https://docs.aws.amazon.com/pdfs/whitepapers/latest/modern-application-development-on-aws/modern-application-development-on-aws.pdf",
+      "size_bytes": 154869
     },
     {
       "slug": "serverless-multi-tier-architectures-api-gateway-lambda",
@@ -77,6 +77,12 @@
       "title": "Data Warehousing on AWS",
       "source_url": "https://docs.aws.amazon.com/pdfs/whitepapers/latest/data-warehousing-on-aws/data-warehousing-on-aws.pdf",
       "size_bytes": 1381611
+    },
+    {
+      "slug": "aws-multi-region-fundamentals",
+      "title": "AWS Multi-Region Fundamentals",
+      "source_url": "https://docs.aws.amazon.com/pdfs/whitepapers/latest/aws-multi-region-fundamentals/aws-multi-region-fundamentals.pdf",
+      "size_bytes": 155149
     },
     {
       "slug": "wellarchitected-framework",
@@ -121,10 +127,112 @@
       "size_bytes": 1217684
     },
     {
-      "slug": "aws-multi-region-fundamentals",
-      "title": "AWS Multi-Region Fundamentals",
-      "source_url": "https://docs.aws.amazon.com/pdfs/whitepapers/latest/aws-multi-region-fundamentals/aws-multi-region-fundamentals.pdf",
-      "size_bytes": 155149
+      "slug": "tagging-best-practices",
+      "title": "Best Practices for Tagging AWS Resources",
+      "source_url": "https://docs.aws.amazon.com/pdfs/whitepapers/latest/tagging-best-practices/tagging-best-practices.pdf",
+      "size_bytes": 683798
+    },
+    {
+      "slug": "practicing-continuous-integration-continuous-delivery",
+      "title": "Practicing Continuous Integration and Continuous Delivery on AWS",
+      "source_url": "https://docs.aws.amazon.com/pdfs/whitepapers/latest/practicing-continuous-integration-continuous-delivery/practicing-continuous-integration-continuous-delivery.pdf",
+      "size_bytes": 1822227
+    },
+    {
+      "slug": "best-practices-deploying-amazon-workspaces",
+      "title": "Best Practices for Deploying Amazon WorkSpaces",
+      "source_url": "https://docs.aws.amazon.com/pdfs/whitepapers/latest/best-practices-deploying-amazon-workspaces/best-practices-deploying-amazon-workspaces.pdf",
+      "size_bytes": 11476204
+    },
+    {
+      "slug": "aws-caf-security-perspective",
+      "title": "AWS Cloud Adoption Framework: Security Perspective",
+      "source_url": "https://docs.aws.amazon.com/pdfs/whitepapers/latest/aws-caf-security-perspective/aws-caf-security-perspective.pdf",
+      "size_bytes": 831596
+    },
+    {
+      "slug": "modern-data-architecture-rationales-on-aws",
+      "title": "Modern Data Architecture Rationales on AWS",
+      "source_url": "https://docs.aws.amazon.com/pdfs/whitepapers/latest/modern-data-architecture-rationales-on-aws/modern-data-architecture-rationales-on-aws.pdf",
+      "size_bytes": 2442764
+    },
+    {
+      "slug": "saas-architecture-fundamentals",
+      "title": "SaaS Architecture Fundamentals",
+      "source_url": "https://docs.aws.amazon.com/pdfs/whitepapers/latest/saas-architecture-fundamentals/saas-architecture-fundamentals.pdf",
+      "size_bytes": 650501
+    },
+    {
+      "slug": "optimizing-enterprise-economics-with-serverless",
+      "title": "Optimizing Enterprise Economics with Serverless Architectures",
+      "source_url": "https://docs.aws.amazon.com/pdfs/whitepapers/latest/optimizing-enterprise-economics-with-serverless/optimizing-enterprise-economics-with-serverless.pdf",
+      "size_bytes": 599674
+    },
+    {
+      "slug": "build-e2e-data-driven-applications",
+      "title": "Architectural Patterns to Build End-to-End Data-Driven Applications on AWS",
+      "source_url": "https://docs.aws.amazon.com/pdfs/whitepapers/latest/build-e2e-data-driven-applications/build-e2e-data-driven-applications.pdf",
+      "size_bytes": 2105726
+    },
+    {
+      "slug": "cost-optimization-laying-the-foundation",
+      "title": "Cost Optimization: Laying the Foundation",
+      "source_url": "https://docs.aws.amazon.com/pdfs/whitepapers/latest/cost-optimization-laying-the-foundation/cost-optimization-laying-the-foundation.pdf",
+      "size_bytes": 247734
+    },
+    {
+      "slug": "serverless-architectures-lambda",
+      "title": "Serverless Architectures with AWS Lambda",
+      "source_url": "https://docs.aws.amazon.com/pdfs/whitepapers/latest/serverless-architectures-lambda/serverless-architectures-lambda.pdf",
+      "size_bytes": 154652
+    },
+    {
+      "slug": "security-at-the-edge",
+      "title": "Security at the Edge: Core Principles",
+      "source_url": "https://docs.aws.amazon.com/pdfs/whitepapers/latest/security-at-the-edge/security-at-the-edge.pdf",
+      "size_bytes": 499358
+    },
+    {
+      "slug": "introduction-devops-aws",
+      "title": "Introduction to DevOps on AWS",
+      "source_url": "https://docs.aws.amazon.com/pdfs/whitepapers/latest/introduction-devops-aws/introduction-devops-aws.pdf",
+      "size_bytes": 839604
+    },
+    {
+      "slug": "establishing-your-cloud-foundation-on-aws",
+      "title": "Establishing Your Cloud Foundation on AWS",
+      "source_url": "https://docs.aws.amazon.com/pdfs/whitepapers/latest/establishing-your-cloud-foundation-on-aws/establishing-your-cloud-foundation-on-aws.pdf",
+      "size_bytes": 1824614
+    },
+    {
+      "slug": "aws-serverless-data-analytics-pipeline",
+      "title": "AWS Serverless Data Analytics Pipeline",
+      "source_url": "https://docs.aws.amazon.com/pdfs/whitepapers/latest/aws-serverless-data-analytics-pipeline/aws-serverless-data-analytics-pipeline.pdf",
+      "size_bytes": 914077
+    },
+    {
+      "slug": "building-data-lakes",
+      "title": "Storage Best Practices for Data and Analytics Applications",
+      "source_url": "https://docs.aws.amazon.com/pdfs/whitepapers/latest/building-data-lakes/building-data-lakes.pdf",
+      "size_bytes": 1513513
+    },
+    {
+      "slug": "big-data-analytics-options",
+      "title": "Big Data Analytics Options on AWS",
+      "source_url": "https://docs.aws.amazon.com/pdfs/whitepapers/latest/big-data-analytics-options/big-data-analytics-options.pdf",
+      "size_bytes": 1723204
+    },
+    {
+      "slug": "build-modern-data-streaming-analytics-architectures",
+      "title": "Build Modern Data Streaming Analytics Architectures on AWS",
+      "source_url": "https://docs.aws.amazon.com/pdfs/whitepapers/latest/build-modern-data-streaming-analytics-architectures/build-modern-data-streaming-analytics-architectures.pdf",
+      "size_bytes": 1580721
+    },
+    {
+      "slug": "navigating-gdpr-compliance",
+      "title": "Navigating GDPR Compliance on AWS",
+      "source_url": "https://docs.aws.amazon.com/pdfs/whitepapers/latest/navigating-gdpr-compliance/navigating-gdpr-compliance.pdf",
+      "size_bytes": 1135763
     }
   ]
 }
