@@ -88,7 +88,7 @@ function Hero() {
     >
       <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-3 py-1 text-xs text-muted-foreground">
         <Sparkles className="h-3 w-3 text-primary" />
-        <span>Citation-grounded RAG over 21 AWS whitepapers</span>
+        <span>Citation-grounded RAG over 39 AWS whitepapers</span>
       </div>
       <h1 className="mt-5 text-balance text-4xl font-semibold tracking-tight sm:text-5xl">
         <span className="gradient-text">Ask AWS whitepapers</span>

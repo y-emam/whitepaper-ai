@@ -105,7 +105,7 @@ export default async function Image() {
               background: "rgba(255,153,0,0.08)"
             }}
           >
-            21 papers indexed
+            39 papers indexed
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <span style={{ color: "#FF9900" }}>•</span> Next.js + Supabase
